@@ -35,3 +35,7 @@ class TranscriptionConfig:
     # "auto" detects CUDA, falls back to CPU
     device: str = "auto"
     compute_type: str = "auto"
+    # 0 = auto (os.cpu_count() in sequential, divided evenly in parallel)
+    cpu_threads: int = 0
+    # 1 = sequential; N = split audio into N chunks processed in parallel
+    parallel_chunks: int = 1

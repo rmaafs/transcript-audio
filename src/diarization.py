@@ -35,6 +35,18 @@ def run_diarization(
         token=hf_token,
     )
 
+    # Move pipeline to the best available device.
+    # pyannote uses PyTorch (not ctranslate2), so MPS works on Apple Silicon.
+    import torch
+    if torch.backends.mps.is_available():
+        pipeline.to(torch.device("mps"))
+        print("Diarization device: MPS (Apple Silicon GPU)")
+    elif torch.cuda.is_available():
+        pipeline.to(torch.device("cuda"))
+        print("Diarization device: CUDA")
+    else:
+        print("Diarization device: CPU")
+
     kwargs = {}
     if num_speakers is not None:
         kwargs["num_speakers"] = num_speakers
