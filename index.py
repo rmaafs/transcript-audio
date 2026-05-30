@@ -9,7 +9,7 @@ load_dotenv()
 
 if __name__ == "__main__":
     config = TranscriptionConfig(
-        file_path="video.mp4",          # Path to audio or video file
+        file_path="her-docker-2-repos.m4a",          # Path to audio or video file
         language="es",                   # Language code: "es", "en", "fr", …
         model=WhisperModel.LARGE_V3,     # See WhisperModel enum for all options
         output_file="transcript.txt",    # Where to save the result

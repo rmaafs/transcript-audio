@@ -7,7 +7,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 from src.diarization import build_speaker_map, get_speaker_for_segment, run_diarization
-from src.formatter import format_segment, save_transcript
+from src.formatter import format_segment, save_transcript, save_transcript_v2
 from src.models import OutputMode, TranscriptionConfig
 
 
@@ -56,6 +56,24 @@ class Transcriber:
 
         save_transcript(lines, self.config.output_file,
                         self.config.output_mode)
+
+        if self.config.output_mode == OutputMode.SPEAKERS:
+            segments_with_speakers = [
+                (
+                    segment.start,
+                    segment.end,
+                    get_speaker_for_segment(
+                        segment.start, segment.end, speaker_map) or "UNKNOWN",
+                    segment.text,
+                )
+                for segment in segments
+            ]
+            save_transcript_v2(
+                segments_with_speakers,
+                self.config.output_file,
+                source_audio_path=self.config.file_path,
+            )
+
         self._clear_whisper_cache()
 
     # ------------------------------------------------------------------
